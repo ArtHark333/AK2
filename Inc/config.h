@@ -90,48 +90,48 @@
 
 
 
-// ############################### TEMPERATURE ###############################
-/* Board overheat detection: the sensor is inside the STM/GD chip.
- * It is very inaccurate without calibration (up to 45°C). So only enable this funcion after calibration!
- * Let your board cool down.
- * see <How to calibrate.
- * Get the real temp of the chip by thermo cam or another temp-sensor taped on top of the chip and write it to TEMP_CAL_LOW_DEG_C.
- * Write debug output value 8 to TEMP_CAL_LOW_ADC. drive around to warm up the board. it should be at least 20°C warmer. repeat it for the HIGH-values.
- * Enable warning and/or poweroff and make and flash firmware.
+// ############################### Температура ###############################
+/* Обнаружение перегрева платы: датчик находится внутри чипа STM/GD.
+* Это очень неточно без калибровки (до 45 ° C).Так что включите эту функцию только после калибровки!
+* Дайте вашей доске остыть.
+* См. Как калибровать.
+* Получите реальную температуру чипа от Thermo Cam или еще одного температуру, записанного на верхнюю часть чипа, и напишите его в TEMP_CAL_LOW_DEG_C.
+* Напишите выходное значение отладки 8 в TEMP_CAL_LOW_ADC.Поезжайте, чтобы согреть доску.Это должно быть не менее 20 ° C теплее.Повторите его для больших значений.
+* Включите предупреждение и/или Poweroff, а также создайте и вспыхивают прошивку.
 */
-#define TEMP_FILT_COEF          655       // temperature filter coefficient in fixed-point. coef_fixedPoint = coef_floatingPoint * 2^16. In this case 655 = 0.01 * 2^16
-#define TEMP_CAL_LOW_ADC        1655      // temperature 1: ADC value
-#define TEMP_CAL_LOW_DEG_C      358       // temperature 1: measured temperature [°C * 10]. Here 35.8 °C
-#define TEMP_CAL_HIGH_ADC       1588      // temperature 2: ADC value
-#define TEMP_CAL_HIGH_DEG_C     489       // temperature 2: measured temperature [°C * 10]. Here 48.9 °C
-#define TEMP_WARNING_ENABLE     0         // to beep or not to beep, 1 or 0, DO NOT ACTIVITE WITHOUT CALIBRATION!
-#define TEMP_WARNING            600       // annoying fast beeps [°C * 10].  Here 60.0 °C
-#define TEMP_POWEROFF_ENABLE    0         // to poweroff or not to poweroff, 1 or 0, DO NOT ACTIVITE WITHOUT CALIBRATION!
-#define TEMP_POWEROFF           650       // overheat poweroff. (while not driving) [°C * 10]. Here 65.0 °C
-// ######################## END OF TEMPERATURE ###############################
+#define TEMP_FILT_COEF          655       // Коэффициент температурного фильтра в фиксированной точке.coef_fixedpoint = coef_floatingPoint * 2^16.В этом случае 655 = 0,01 * 2^16
+#define TEMP_CAL_LOW_ADC        1655      // Температура 1: значение АЦП
+#define TEMP_CAL_LOW_DEG_C      358       // Температура 1: измеренная температура [° C * 10].Здесь 35,8 ° C.
+#define TEMP_CAL_HIGH_ADC       1588      // Температура 2: значение АЦП
+#define TEMP_CAL_HIGH_DEG_C     489       // Температура 2: измеренная температура [° C * 10].Здесь 48,9 ° C.
+#define TEMP_WARNING_ENABLE     0         // Чтобы звучать или не звучать, 1 или 0, не активируйте без калибровки!
+#define TEMP_WARNING            600       // раздражающий быстрый звуковой сигнал [° C * 10].Здесь 60,0 ° C.
+#define TEMP_POWEROFF_ENABLE    0         // Для Poweroff или не для Poweroff, 1 или 0, не активируйте без калибровки!
+#define TEMP_POWEROFF           650       // перегрев мощность.(в то время как не ездит) [° C * 10].Здесь 65,0 ° C.
+// ######################## Конец температуры ###############################
 
 
 
-// ############################### MOTOR CONTROL #########################
-/* GENERAL NOTES:
- * 1. The parameters here are over-writing the default motor parameters. For all the available parameters check BLDC_controller_data.c
- * 2. The parameters are represented in fixed point data type for a more efficient code execution
- * 3. For calibrating the fixed-point parameters use the Fixed-Point Viewer tool (see <https://github.com/EmanuelFeru/FixedPointViewer>)
- * 4. For more details regarding the parameters and the working principle of the controller please consult the Simulink model
- * 5. A webview was created, so Matlab/Simulink installation is not needed, unless you want to regenerate the code.
- * The webview is an html page that can be opened with browsers like: Microsoft Internet Explorer or Microsoft Edge
- *
- * NOTES Field Weakening / Phase Advance:
- * 1. The Field Weakening is a linear interpolation from 0 to FIELD_WEAK_MAX or PHASE_ADV_MAX (depeding if FOC or SIN is selected, respectively)
- * 2. The Field Weakening starts engaging at FIELD_WEAK_LO and reaches the maximum value at FIELD_WEAK_HI
- * 3. If you re-calibrate the Field Weakening please take all the safety measures! The motors can spin very fast!
+// ############################### Моторный контроль #########################
+/* Общие примечания:
+* 1. Параметры здесь переписывают параметры двигателя по умолчанию.Для всех доступных параметров Проверьте bldc_controller_data.c
+* 2. Параметры представлены в типе данных с фиксированной точкой для более эффективного выполнения кода
+* 3. Для калибровки параметров с фиксированной точкой Используйте инструмент просмотра с фиксированной точкой (см. <Https://github.com/emanuelferu/fixedpointviewer>)
+* 4. Для получения более подробной информации о параметрах и принципе работы контроллера обратитесь к модели Simulink
+* 5. Был создан веб -просмотр, поэтому установка MATLAB/Simulink не нужна, если только вы не хотите восстановить код.
+* Webview - это HTML -страница, которую можно открыть с помощью браузеров, таких как: Microsoft Internet Explorer или Microsoft Edge
+*
+* Примечания ослабления поля / аванс фазы:
+* 1. Освобождение поля представляет собой линейную интерполяцию от 0 до Field_weak_max или phase_adv_max (Depeding, если Foc или Sin выбирается, соответственно)
+* 2. Освобождение поля начинается вовлекать в Field_weak_lo и достигает максимального значения в Field_weak_hi
+* 3. Если вы переоцените поле, ослабляя поле, пожалуйста, примите все меры безопасности!Моторы могут вращаться очень быстро!
 
-   Inputs:
-    - input1[inIdx].cmd and input2[inIdx].cmd: normalized input values. INPUT_MIN to INPUT_MAX
-    - button1 and button2: digital input values. 0 or 1
-    - adc_buffer.l_tx2 and adc_buffer.l_rx2: unfiltered ADC values (you do not need them). 0 to 4095
-   Outputs:
-    - cmdL and cmdR: normal driving INPUT_MIN to INPUT_MAX
+Входные данные:
+- input1 [inidx] .cmd и input2 [inidx] .cmd: нормализованные входные значения.Input_min to input_max
+- Button1 и Button2: Цифровые значения ввода.0 или 1
+- adc_buffer.l_tx2 и adc_buffer.l_rx2: нефильтрованные значения ADC (они вам не нужны).От 0 до 4095
+Выходы:
+- cmdl и cmdr: нормальное вождение input_min to input_max
 */
 #define COM_CTRL        0               // [-] Commutation Control Type
 #define SIN_CTRL        1               // [-] Sinusoidal Control Type
@@ -154,7 +154,7 @@
 // Limitation settings
 #define I_MOT_MAX       15              // [A] Maximum single motor current limit
 #define I_DC_MAX        17              // [A] Maximum stage2 DC Link current limit for Commutation and Sinusoidal types (This is the final current protection. Above this value, current chopping is applied. To avoid this make sure that I_DC_MAX = I_MOT_MAX + 2A)
-#define N_MOT_MAX       1000            // [rpm] Maximum motor speed limit
+#define N_MOT_MAX       500            // [rpm] Максимальное ограничение скорости двигателя(обороты в минуту)
 
 // Field Weakening / Phase Advance
 #define FIELD_WEAK_ENA  0               // [-] Field Weakening / Phase Advance enable flag: 0 = Disabled (default), 1 = Enabled
@@ -173,13 +173,13 @@
 
 
 // ############################## DEFAULT SETTINGS ############################
-// Default settings will be applied at the end of this config file if not set before
-#define INACTIVITY_TIMEOUT        8       // Minutes of not driving until poweroff. it is not very precise.
-#define BEEPS_BACKWARD            1       // 0 or 1
-#define ADC_MARGIN                100     // ADC input margin applied on the raw ADC min and max to make sure the MIN and MAX values are reached even in the presence of noise
-#define ADC_PROTECT_TIMEOUT       100     // ADC Protection: number of wrong / missing input commands before safety state is taken
-#define ADC_PROTECT_THRESH        200     // ADC Protection threshold below/above the MIN/MAX ADC values
-#define AUTO_CALIBRATION_ENA              // Enable/Disable input auto-calibration by holding power button pressed. Un-comment this if auto-calibration is not needed.
+// Настройки по умолчанию будут применены в конце этого файла конфигура
+#define INACTIVITY_TIMEOUT        30       // Минут бездействия для отключения.
+#define BEEPS_BACKWARD            0       // 0 or 1
+#define ADC_MARGIN                100     // Входной запас ADC, применяемый на RAW ADC MIN и MAX, чтобы убедиться, что значения MIN и MAX достигаются даже в присутствии шума
+#define ADC_PROTECT_TIMEOUT       100     // Защита АЦП: количество неправильных / пропущенных команд ввода до принятия состояния безопасности
+#define ADC_PROTECT_THRESH        200     // Порог защиты АЦП ниже/выше значений Мин/Макс АЦП
+#define AUTO_CALIBRATION_ENA              // Включите/отключите автоматическую калибровку ввода, удерживая нажатую кнопку питания.Неоплачиваем это, если автоматическая калибровка не нужна.
 
 /* FILTER is in fixdt(0,16,16): VAL_fixedPoint = VAL_floatingPoint * 2^16. In this case 6553 = 0.1 * 2^16
  * Value of COEFFICIENT is in fixdt(1,16,14)
@@ -415,9 +415,9 @@
 
 // ################################# VARIANT_PWM SETTINGS ##############################
 #ifdef VARIANT_PWM
-/* ###### CONTROL VIA RC REMOTE ######
- * Right sensor board cable. Connect PA2 to channel 1 and PA3 to channel 2 on receiver.
- * Channel 1: steering, Channel 2: speed.
+/* ######Управление через RC Remote ######
+* Кабель правой датчики.Подключите PA2 к каналу 1 и PA3 к каналу 2 на приемнике.
+* Канал 1: рулевое управление, канал 2: скорость.
 */
   // #define DUAL_INPUTS                     // ADC*(Primary) + PWM(Auxiliary). Uncomment this to use Dual-inputs
   #ifdef DUAL_INPUTS

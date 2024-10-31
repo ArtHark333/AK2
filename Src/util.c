@@ -416,14 +416,42 @@ void UART_DisableRxErrors(UART_HandleTypeDef *huart)
 
 /* =========================== General Functions =========================== */
 
-void poweronMelody(void) {
-    buzzerCount = 0;  // prevent interraction with beep counter
-    for (int i = 8; i >= 0; i--) {
-      buzzerFreq = (uint8_t)i;
-      HAL_Delay(100);
+// void poweronMelody(void) {
+//     buzzerCount = 0;  // prevent interraction with beep counter
+//     for (int i = 8; i >= 0; i--) {
+//       buzzerFreq = (uint8_t)i;
+//       HAL_Delay(100);
+//     }
+//     buzzerFreq = 0;
+// }
+
+void playUkrainianAnthem(void) {
+    uint8_t melody[] = { 
+        440,  // A4
+        494,  // B4
+        523,  // C5
+        587,  // D5
+        659,  // E5
+        698,  // F5
+        784,  // G5
+        880   // A5
+    };
+    
+    uint16_t duration[] = { 200, 200, 400, 200, 200, 400, 200, 600 };  // Длительности для каждой ноты
+
+    for (int i = 0; i < sizeof(melody) / sizeof(melody[0]); i++) {
+        buzzerFreq = melody[i];
+        HAL_Delay(duration[i]);
     }
-    buzzerFreq = 0;
+    buzzerFreq = 0;  // Остановить звук
 }
+
+void poweronMelody(void) {
+    buzzerCount = 0;  // Предотвратить взаимодействие с счётчиком писков
+    playUkrainianAnthem();
+    HAL_Delay(100);  // Пауза перед завершением
+}
+
 
 void beepCount(uint8_t cnt, uint8_t freq, uint8_t pattern) {
     buzzerCount   = cnt;
@@ -1539,20 +1567,21 @@ void saveConfig() {
 
 
 void poweroff(void) {
-  enable = 0;
-  #if defined(DEBUG_SERIAL_USART2) || defined(DEBUG_SERIAL_USART3)
-  printf("-- Motors disabled --\r\n");
-  #endif
-  buzzerCount = 0;  // prevent interraction with beep counter
-  buzzerPattern = 0;
-  for (int i = 0; i < 8; i++) {
-    buzzerFreq = (uint8_t)i;
-    HAL_Delay(100);
+  // enable = 0;
+  // #if defined(DEBUG_SERIAL_USART2) || defined(DEBUG_SERIAL_USART3)
+  // printf("-- Motors disabled --\r\n");
+  // #endif
+  // buzzerCount = 0;  // prevent interraction with beep counter
+  // buzzerPattern = 0;
+  // for (int i = 0; i < 8; i++) {
+  //   buzzerFreq = (uint8_t)i;
+  //   HAL_Delay(100);
+  // }
+  // saveConfig();
+  // HAL_GPIO_WritePin(OFF_PORT, OFF_PIN, GPIO_PIN_RESET);
+  // while(1) {}
+    playUkrainianAnthem();
   }
-  saveConfig();
-  HAL_GPIO_WritePin(OFF_PORT, OFF_PIN, GPIO_PIN_RESET);
-  while(1) {}
-}
 
 
 void poweroffPressCheck(void) {
