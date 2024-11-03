@@ -425,19 +425,42 @@ void UART_DisableRxErrors(UART_HandleTypeDef *huart)
 //     buzzerFreq = 0;
 // }
 
+// Add this prototype in main.c or a shared header file
+void playUkrainianAnthem(void);
+
 void playUkrainianAnthem(void) {
-    uint8_t melody[] = { 
-        440,  // A4
-        494,  // B4
-        523,  // C5
-        587,  // D5
+    uint16_t melody[] = {
+        784,  // G5
+        784,  // G5
+        784,  // G5
         659,  // E5
         698,  // F5
         784,  // G5
-        880   // A5
+        659,  // E5
+        523,  // C5
+        587,  // D5
+        659,  // E5
+        784,  // G5
+        784,  // G5
+        659,  // E5
+        698,  // F5
+        784,  // G5
+        880,  // A5
+        784,  // G5
+        698,  // F5
+        659,  // E5
+        523,  // C5
     };
-    
-    uint16_t duration[] = { 200, 200, 400, 200, 200, 400, 200, 600 };  // Длительности для каждой ноты
+
+    uint16_t duration[] = { 
+        200, 200, 200, 
+        200, 200, 400, 
+        200, 200, 200, 
+        400, 200, 200, 
+        200, 200, 400, 
+        200, 400, 200, 
+        200, 200, 600 
+    };
 
     for (int i = 0; i < sizeof(melody) / sizeof(melody[0]); i++) {
         buzzerFreq = melody[i];
